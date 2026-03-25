@@ -40,10 +40,10 @@
           05 IN-STATUS      PIC X(10).
 
        FD MO01-CUST-KSDS
-           RECORD CONTAINS         151   CHARACTERS.
+           RECORD CONTAINS         149   CHARACTERS.
 
        01 MO01-CUSTOMER-RECORD.
-          05 CF-O-CUST-ID  PIC X(14).
+          05 CF-O-CUST-ID  PIC X(12).
           05 OUT-FNAME     PIC X(15).
           05 OUT-LNAME     PIC X(15).
           05 OUT-AREACODE  PIC X(7).
@@ -109,7 +109,6 @@
           05 WS-LN-PREFIX        PIC X(2).
           05 WS-AREA-PREFIX      PIC X(4).
           05 WS-RAND-4CH         PIC X(4).
-          05 WS-DT-PREFIX        PIC X(2).
 
        01 WS-ERROR-FLAGS.
           05 WS-ERROR-RECORD-FLAG  PIC 9.
@@ -228,8 +227,8 @@
 
        2410-GENERATE-ID.
       *    ------------------------------------------------------------
-      *    Generate unique customer ID from FN(2) + LN(2) + 
-      *    AREACODE(4) + RANDOM(4) + DATE(2) = 14 chars
+      *    Generate unique customer ID from FN(2) + LN(2) + AREA(4) + RAND(4)
+      *    = 12 chars total for better uniqueness
       *    ------------------------------------------------------------
            COMPUTE WS-RAND-SEED =
                FUNCTION MOD(
@@ -242,15 +241,17 @@
 
            MOVE WS-RAND-RESULT     TO WS-RAND-SEED
            MOVE WS-RAND-RESULT     TO WS-RAND-4DIGIT
-           MOVE WS-RAND-DISPLAY    TO WS-RAND-4CH.
+           MOVE WS-RAND-DISPLAY(1:4) TO WS-RAND-4CH.
 
-      *    Build 14-byte customer ID
+      *    Build 12-byte customer ID with AreaCode for uniqueness
            MOVE IN-FNAME(1:2)    TO WS-FN-PREFIX.
            MOVE IN-LNAME(1:2)    TO WS-LN-PREFIX.
-           MOVE IN-AREACODE(1:4) TO WS-AREA-PREFIX.
-           MOVE WS-DD              TO WS-DT-PREFIX.
+           MOVE IN-AREACODE(4:4) TO WS-AREA-PREFIX.
            
-           MOVE WS-CUST-ID-GEN     TO CF-O-CUST-ID.
+           MOVE WS-FN-PREFIX     TO CF-O-CUST-ID(1:2).
+           MOVE WS-LN-PREFIX     TO CF-O-CUST-ID(3:2).
+           MOVE WS-AREA-PREFIX   TO CF-O-CUST-ID(5:4).
+           MOVE WS-RAND-4CH      TO CF-O-CUST-ID(9:4).
 
            DISPLAY 'CUSTOMER ID IS',  ' ', CF-O-CUST-ID.
 
