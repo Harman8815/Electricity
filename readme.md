@@ -27,56 +27,55 @@ The system revolves around the following datasets:
 - PAYMENT (Transaction)
 
 ---
-```mermaid 
+```mermaid
 erDiagram
 
-CUSTOMER {  
-string cust_id PK "9 bytes"  
-string first_name "15 bytes"  
-string last_name "15 bytes"  
-string area_code "7 bytes"  
-string address_line_1 "30 bytes"  
-string address_line_2 "30 bytes"  
-string city "20 bytes"  
-decimal total_units_consumed "10 bytes (PIC X(10))"  
-string status "10 bytes"  
-int total_record_length "146 bytes"  
+CUSTOMER {
+    string cust_id PK "14 bytes"
+    string first_name "15 bytes"
+    string last_name "15 bytes"
+    string area_code "7 bytes"
+    string address_line_1 "30 bytes"
+    string address_line_2 "30 bytes"
+    string city "20 bytes"
+    decimal total_units_consumed "10 bytes (PIC X(10))"
+    string status "10 bytes"
+    int total_record_length "146 bytes"
 }
 
 METER {
-    string meter_id PK
-    string cust_id FK
-    date install_date
-    decimal rate
-    string status
+    string meter_id PK "14 bytes"
+    string cust_id FK "14 bytes"
+    date install_date "12 bytes"
+    string status "1 byte"
 }
 
 READING_TXN {
-    string meter_id PK
-    date reading_date PK
-    decimal prev_read
-    decimal curr_read
+    string meter_id PK "14 bytes"
+    date reading_date PK "12 bytes"
+    decimal prev_read "6 bytes"
+    decimal curr_read "6 bytes"
 }
 
 BILL {
-    string bill_id PK
-    string cust_id FK
-    string first_name
-    string last_name
-    decimal units
-    decimal amount
-    decimal total_paid
-    decimal balance_due
-    string status
-    date bill_date
-    date due_date
+    string bill_id PK "14 bytes"
+    string cust_id FK "14 bytes"
+    string first_name "15 bytes"
+    string last_name "15 bytes"
+    decimal units "10 bytes"
+    decimal amount "10 bytes"
+    decimal total_paid "10 bytes"
+    decimal balance_due "10 bytes"
+    string status "4 bytes"
+    date bill_date "12 bytes"
+    date due_date "12 bytes"
 }
 
 PAYMENT {
-    string payment_id PK
-    string bill_id FK
-    decimal amount
-    date payment_date
+    string payment_id PK "14 bytes"
+    string bill_id FK "14 bytes"
+    decimal amount "10 bytes"
+    date payment_date "11 bytes"
 }
 
 CUSTOMER ||--o{ METER : owns
@@ -84,6 +83,7 @@ METER ||--o{ READING_TXN : records
 CUSTOMER ||--o{ BILL : billed
 BILL ||--o{ PAYMENT : paid_in_parts
 ```
+
 ### Data Model
 
 #### CUSTOMER (Master Dataset)
