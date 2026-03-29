@@ -327,33 +327,49 @@
 
            PERFORM 2360-FIND-TOP5.
 
-       2360-FIND-TOP5 SECTION.
+      2360-FIND-TOP5 SECTION.
 
-           DISPLAY '----- FINDING TOP 5 CONSUMERS -----'.
+       DISPLAY '----- FINDING TOP 5 CONSUMERS -----'
 
-           PERFORM VARYING WS-HIGH-LOOP-CTR FROM 1 BY 1
-                   UNTIL WS-HIGH-LOOP-CTR > WS-HIGH-COUNT
+       PERFORM VARYING WS-HIGH-LOOP-CTR FROM 1 BY 1
+               UNTIL WS-HIGH-LOOP-CTR > WS-HIGH-COUNT
 
-               SET WS-HIGH-IDX TO WS-HIGH-LOOP-CTR
+           SET WS-HIGH-IDX TO WS-HIGH-LOOP-CTR
+           MOVE 'N' TO WS-FOUND-FLAG
 
-               PERFORM VARYING WS-RANK-COUNTER FROM 1 BY 1
-                       UNTIL WS-RANK-COUNTER > 5
+           PERFORM VARYING WS-RANK-COUNTER FROM 1 BY 1
+                   UNTIL WS-RANK-COUNTER > 5
+                      OR WS-FOUND-FLAG = 'Y'
 
-                   IF WS-H-UNITS(WS-HIGH-IDX) > 
-                      WS-TOP-UNITS(WS-RANK-COUNTER)
+               IF WS-H-UNITS(WS-HIGH-IDX) >
+                  WS-TOP-UNITS(WS-RANK-COUNTER)
 
-                      MOVE WS-H-UNITS(WS-HIGH-IDX)
-                          TO WS-TOP-UNITS(WS-RANK-COUNTER)
+                  * Shift values down
+                  PERFORM VARYING WS-TEMP-LOOP-CTR1 FROM 5 BY -1
+                          UNTIL WS-TEMP-LOOP-CTR1 <= WS-RANK-COUNTER
 
-                      MOVE WS-HIGH-LOOP-CTR
-                          TO WS-TOP-IDX(WS-RANK-COUNTER)
+                      MOVE WS-TOP-UNITS(WS-TEMP-LOOP-CTR1 - 1)
+                          TO WS-TOP-UNITS(WS-TEMP-LOOP-CTR1)
 
-                      MOVE 6 TO WS-RANK-COUNTER
-                   END-IF
+                      MOVE WS-TOP-IDX(WS-TEMP-LOOP-CTR1 - 1)
+                          TO WS-TOP-IDX(WS-TEMP-LOOP-CTR1)
 
-               END-PERFORM
+                  END-PERFORM
 
-           END-PERFORM.   
+                  * Insert value
+                  MOVE WS-H-UNITS(WS-HIGH-IDX)
+                      TO WS-TOP-UNITS(WS-RANK-COUNTER)
+
+                  MOVE WS-HIGH-LOOP-CTR
+                      TO WS-TOP-IDX(WS-RANK-COUNTER)
+
+                  MOVE 'Y' TO WS-FOUND-FLAG
+
+               END-IF
+
+           END-PERFORM
+
+       END-PERFORM. 
       2400-WRITE-TOP-FIVE-REPORT SECTION.
            DISPLAY '----------------------------------------'
            DISPLAY 'WRITING TOP 5 HIGH CONSUMERS REPORT .....'
