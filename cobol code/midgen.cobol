@@ -47,9 +47,10 @@
           05 CUST-FILLER      PIC X(68).
 
        FD MO01-METER-KSDS
-           RECORD CONTAINS         24  CHARACTERS.
+           RECORD CONTAINS         38  CHARACTERS.
 
        01 MO01-METER-RECORD.
+          05 MTR-ID           PIC X(14).
           05 MTR-CUST-ID      PIC X(12).
           05 MTR-PREV-READ    PIC 9(06).
           05 MTR-CURR-READ    PIC 9(06).
@@ -243,19 +244,24 @@
 
        2400-WRITE-METER-KSDS SECTION.
 
-           MOVE CUST-KEY                  TO MTR-CUST-ID.
+           STRING WS-MTR-PREFIX WS-MTR-CUST-CH1 WS-MTR-CUST-CH2
+                  WS-MTR-DD WS-MTR-MM WS-MTR-RAND
+                  DELIMITED BY SIZE
+                  INTO MTR-ID
+           END-STRING.
 
+           MOVE CUST-KEY                  TO MTR-CUST-ID.
            COMPUTE MTR-PREV-READ = FUNCTION NUMVAL(IN-PREV-READ)
            COMPUTE MTR-CURR-READ = FUNCTION NUMVAL(IN-CURR-READ)
 
-           DISPLAY 'ATTEMPTING METER FOR CUST: ' MTR-CUST-ID
+           DISPLAY 'ATTEMPTING METER: ' MTR-ID ' FOR CUST: ' MTR-CUST-ID
                    ' PREV READ: ' MTR-PREV-READ
                    ' CURR READ: ' MTR-CURR-READ.
 
            WRITE MO01-METER-RECORD
                INVALID KEY
                    IF WS-KSDS-STATUS = '22'
-                      DISPLAY 'DUPLICATE KEY DETECTED: ' MTR-CUST-ID
+                      DISPLAY 'DUPLICATE KEY DETECTED: ' MTR-ID
                               ' - RETRYING...'
                       ADD 1 TO WS-DUP-CTR
                       ADD 1 TO WS-RETRY-CTR

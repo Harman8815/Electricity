@@ -141,7 +141,7 @@ This table is used for generating reports and displaying billing information.
 |------|-------|------|-------------|
 | **CUSTKSDS** | **83** | KSDS | Customer master (CUST-ID 12 + first 10 + last 10 + area 6 + space 1 + addr 29 + city 10 + units 5) |
 | **TO01-CUSTOMER-ERR** | **71** | SEQ | Customer error records |
-| **MO01-METER-KSDS** | **24** | KSDS | Meter master (MTR-CUST-ID 12 + prev 6 + curr 6) |
+| **MO01-METER-KSDS** | **38** | KSDS | Meter master (MTR-ID 14 + MTR-CUST-ID 12 + prev 6 + curr 6) |
 | **TO01-METER-ERR** | **12** | SEQ | Meter error records |
 
 ### Field Size Details
