@@ -1,204 +1,179 @@
-# Electricity Billing System
 
-[![COBOL](https://img.shields.io/badge/COBOL-00599C?style=flat&logoColor=white)]()
-[![JCL](https://img.shields.io/badge/JCL-1E90FF?style=flat)]()
-[![DB2](https://img.shields.io/badge/DB2-008000?style=flat)]()
-[![VSAM](https://img.shields.io/badge/VSAM-FF6B6B?style=flat)]()
-[![Mainframe](https://img.shields.io/badge/Mainframe-FF1493?style=flat)]()
+# Electricity Billing System (Mainframe Project)
 
-Mainframe-style batch processing system for electricity billing using **COBOL**, **JCL**, and **DB2**.
+## Overview
 
-## Quick Start
+This project is a simple electricity billing system designed for a mainframe environment using COBOL, JCL, and VSAM. The focus is on keeping the system minimal, easy to understand, and straightforward to implement.
 
-This project simulates an electricity board's billing system with:
-- Customer and meter management
-- Bill generation from meter readings  
-- Payment processing
-- Analytics and reporting
+The system handles basic customer data, meter readings, and generates a monthly bill based on usage. It avoids unnecessary complexity such as historical data tracking, multiple relationships, or advanced database features.
 
-## Folder Structure
+---
 
-```
-Electricity/
-├── cobol/                      # VSAM version COBOL programs
-│   ├── elect001.cobol          # Customer data load program
-│   ├── billpay.cobol           # Bill payment processing program
-│   ├── arearpt.cobol           # Area-wise consumption report
-│   ├── highcons.cobol          # High consumption alert report
-│   └── meter_txn.cobol         # Meter transaction processor
-│
-├── db2/                        # DB2 integrated COBOL programs
-│   ├── electdb2.cobol          # Customer load to DB2
-│   ├── meterdb2.cobol          # Meter load to DB2
-│   ├── billpaydb2.cobol        # Payment processing with DB2
-│   ├── arearptdb2.cobol        # Area report using DB2
-│   ├── highconsdb2.cobol       # High consumption report using DB2
-│   └── jcl/                    # DB2 execution guides
-│       ├── 01-electdb2-guide.md
-│       ├── 02-meterdb2-guide.md
-│       ├── 03-arearptdb2-guide.md
-│       ├── 04-highconsdb2-guide.md
-│       └── 05-billpaydb2-guide.md
-│
-├── jcl/                        # JCL job scripts (VSAM version)
-│   ├── runjcl01.txt            # Main execution JCL
-│   ├── runbillpay.txt          # Bill payment JCL
-│   ├── runarearpt.txt          # Area report JCL
-│   └── runhighcons.txt         # High consumption JCL
-│
-├── data/                       # Sample input data files
-│   ├── customer_fixed_200.txt  # Customer test data
-│   ├── meter_input_200.txt     # Meter test data
-│   ├── billdata.txt            # Sample billing data
-│   └── payment.txt             # Sample payment data
-│
-├── ksds/                       # VSAM KSDS datasets
-│   └── customer                # Customer VSAM dataset
-│
-├── python/                     # Data generation utilities
-│   ├── customer_gen.py         # Generate customer test data
-│   ├── meter_gen.py            # Generate meter test data
-│   └── meter_txn.py            # Generate transaction data
-│
-├── docs/                       # Documentation
-│   ├── project-overview.md     # Detailed architecture and data model
-│   ├── guides/                 # Setup and how-to guides
-│   │   ├── working with db2.md
-│   │   ├── DB2_INTEGRATION.md
-│   │   ├── DB2_MIGRATION_GUIDE.md
-│   │   └── transfer-data-to-db2/   # PDS to DB2 utilities
-│   │       ├── README.md
-│   │       └── jcl/
-│   │           ├── pds-to-db2.jcl
-│   │           └── db2-to-pds.jcl
-│   └── migration/              # Migration documentation
-│       ├── DB2_ELECTDB2_CHANGES.md
-│       ├── DB2_METERDB2_CHANGES.md
-│       ├── DB2_AREARPTDB2_CHANGES.md
-│       ├── DB2_BILLPAYDB2_CHANGES.md
-│       └── DB2_HIGHCONSDB2_CHANGES.md
-│
-├── src/                        # Source text files
-│   ├── billgen.txt
-│   ├── elect001.txt
-│   ├── arearpt.txt
-│   └── arearpt.txt
-│
-└── readme.md                   # This file
-```
+## System Architecture
 
-## Data Model
+The system follows a simple linear flow:
+
+Customer → Meter → Bill
+
+- Customer stores user information  
+- Meter stores current and previous readings  
+- Bill stores calculated data for the current month  
+
+---
+
+## ER Diagram
 
 ```mermaid
 erDiagram
-    CUSTOMER ||--o{ METER : owns
-    CUSTOMER ||--o{ BILL : billed
-    METER ||--o{ READING_TXN : records
-    BILL ||--o{ PAYMENT : paid_in_parts
-    
+
     CUSTOMER {
-        string cust_id PK "14 bytes"
-        string first_name "15 bytes"
-        string last_name "15 bytes"
-        string area_code "7 bytes"
-        string address_line_1 "30 bytes"
-        string address_line_2 "30 bytes"
-        string city "20 bytes"
-        string total_units_consumed "10 bytes"
-        string status "10 bytes"
+        string cust_id PK
+        string first_name
+        string last_name
+        string area_code
+        string address_line
+        string city
+        number total_units
     }
-    
+
     METER {
-        string meter_id PK "14 bytes"
-        string cust_id FK "14 bytes"
-        string install_date "12 bytes"
-        string status "1 byte"
+        string cust_id PK, FK
+        string meter_id
+        number prev_read
+        number curr_read
     }
-    
-    READING_TXN {
-        string meter_id PK "14 bytes"
-        string reading_date PK "10 bytes"
-        decimal prev_read "9(7)V99"
-        decimal curr_read "9(7)V99"
-    }
-    
+
     BILL {
-        string bill_id PK "14 bytes"
-        string cust_id FK "14 bytes"
-        string first_name "15 bytes"
-        string last_name "15 bytes"
-        decimal units "10 bytes"
-        decimal amount "10 bytes"
-        decimal total_paid "10 bytes"
-        decimal balance_due "10 bytes"
-        string status "4 bytes"
+        string cust_id PK, FK
+        string meter_id
+        string first_name
+        string last_name
+        number units_used
+        number bill_amount
     }
+
+    CUSTOMER ||--|| METER : "assigned"
+    CUSTOMER ||--|| BILL : "generates"
+    METER ||--|| BILL : "used for billing"
+````
+
+---
+
+## Table Description
+
+### Customer Table
+
+The Customer table stores basic information about each user. It acts as the main reference point for the entire system.
+
+It includes:
+
+- Unique customer ID
     
-    PAYMENT {
-        string payment_id PK "8 bytes"
-        string bill_id FK "14 bytes"
-        decimal amount "9(7)V99"
-        string payment_date "10 bytes"
-    }
-```
+- First and last name
+    
+- Area code
+    
+- Address
+    
+- City
+    
+- Total units consumed so far
+    
 
-## Key Components
+This table is used whenever customer-related data is required.
 
-| Component | Description |
-|-----------|-------------|
-| **VSAM Version** | Sequential/VSAM file processing (`cobol/`, `jcl/`) |
-| **DB2 Version** | Database-backed processing (`db2/`) |
-| **Data Generator** | Python scripts to create test data (`python/`) |
+---
 
-## Data Flow
+### Meter Table
 
-```
-CUSTOMER (Master) → METER (Master) → READING_TXN (Input)
-                                            ↓
-                                      BILLGEN → BILL (Output)
-                                            ↓
-                                      PAYMENT → BILL_UPDATE
-                                            ↓
-                                      Reports (Area, High Consumption, Payment Status)
-```
+The Meter table stores the electricity readings for each customer.
 
-## Getting Started
+It includes:
 
-1. **Generate Test Data**: Use `python/customer_gen.py` and `python/meter_gen.py`
-2. **Run VSAM Version**: Submit JCL from `jcl/` folder
-3. **Run DB2 Version**: Follow guides in `db2/jcl/` folder
+- Customer ID
+    
+- Meter ID
+    
+- Previous reading
+    
+- Current reading
+    
 
-## Documentation
+Only the latest readings are stored. There is no historical tracking, which keeps the design simple and efficient.
 
-- [Project Overview](docs/project-overview.md) - Detailed architecture and data model
-- [DB2 Setup Guide](docs/guides/working%20with%20db2.md) - DB2 configuration and setup
-- [DB2 Integration](docs/guides/DB2_INTEGRATION.md) - DB2 program integration details
-- [Data Transfer to DB2](docs/guides/transfer-data-to-db2/) - PDS to DB2 utilities
+---
 
-## Datasets
+### Bill Table
 
-| Dataset | Type | Description |
-|---------|------|-------------|
-| CUSTOMER | Master | Customer records (146 bytes) |
-| METER | Master | Meter records (41 bytes) |
-| READING_TXN | Transaction | Meter readings (29 bytes) |
-| BILL | Derived | Generated bills |
-| PAYMENT | Transaction | Payment records |
+The Bill table stores the calculated bill for the current month only.
 
-## Reports Generated
+It includes:
 
-1. **Area-wise Consumption Report** - Consumption by geographic area
-2. **High Consumption Report** - Top 5 highest consuming customers
-3. **Bill Payment Status Report** - Payment tracking with status (Due/Partial/Paid)
+- Customer ID
+    
+- Meter ID
+    
+- Customer name (for reporting)
+    
+- Units consumed
+    
+- Final bill amount
+    
 
-## Technologies
+This table is used for generating reports and displaying billing information.
 
-- COBOL (batch programs)
-- JCL (job control)
-- VSAM (virtual storage)
-- DB2 (relational database)
-- Python (data generation)
+---
 
-## License
+## File Format Specifications
 
-Capstone Project - Educational Use
+### Input Data Files (Python Generated)
+
+| File | LRECL | RECFM | Record Layout |
+|------|-------|-------|---------------|
+| **customer.dat** | **71** | FB | first_name(10) + last_name(10) + area_code(6) + space(1) + address(29) + city(10) + units(5) |
+| **meter.dat** | **12** | FB | prev_read(6) + curr_read(6) |
+| **bill.dat** | **33** | FB | first_name(10) + last_name(10) + units(5) + amount(8) |
+| **master.csv** | VAR | V | CSV format with header |
+
+### COBOL VSAM Files
+
+| File | LRECL | Type | Description |
+|------|-------|------|-------------|
+| **CUSTKSDS** | **83** | KSDS | Customer master (CUST-ID 12 + first 10 + last 10 + area 6 + space 1 + addr 29 + city 10 + units 5) |
+| **TO01-CUSTOMER-ERR** | **71** | SEQ | Customer error records |
+| **MO01-METER-KSDS** | **38** | KSDS | Meter master (MTR-ID 14 + MTR-CUST-ID 12 + prev 6 + curr 6) |
+| **TO01-METER-ERR** | **12** | SEQ | Meter error records |
+
+### Field Size Details
+
+| Field | Size | Type | Used In |
+|-------|------|------|---------|
+| first_name | 10 | X | customer.dat, bill.dat, CUSTKSDS |
+| last_name | 10 | X | customer.dat, bill.dat, CUSTKSDS |
+| area_code | 6 | X | customer.dat, CUSTKSDS |
+| space | 1 | X | Separator between area and address |
+| address_line | 29 | X | customer.dat, CUSTKSDS |
+| city | 10 | X | customer.dat, CUSTKSDS |
+| units | 5 | 9 | customer.dat, bill.dat, CUSTKSDS |
+| amount | 8 | 9 | bill.dat |
+| prev_read | 6 | 9 | meter.dat |
+| curr_read | 6 | 9 | meter.dat |
+| CUST-ID | 12 | X | CUSTKSDS (C + fname(2) + lname(2) + area(4) + random(3)) |
+| MTR-ID | 14 | X | MTRKSDS (MTR- + cust(2) + DD + MM + random(4)) |
+
+---
+
+# 📘 Data Processing Programs
+
+1. Customer ID Generation
+    
+2. Meter ID Generation
+    
+3. Bill Generation
+    
+4. Area-wise Report
+    
+5. Highest Units Customer
+    
+
+---

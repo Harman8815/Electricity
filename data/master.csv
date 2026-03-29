@@ -1,0 +1,101 @@
+first_name,last_name,area_code,address_line,city,prev_read,curr_read
+Sneha,Singh,380987,789 Lake View Apartments,Indore,121,215
+Riya,Sharma,546552,987 River Side Road,Bangalore,72,144
+Anjali,Nair,738671,"456 Park Avenue, Block 3",Kochi,135,230
+Vikram,Verma,846227,147 Hill Top Residency,Ahmedabad,220,285
+Riya,Verma,167173,"456 Park Avenue, Block 3",Kolkata,146,240
+Rahul,Yadav,800338,987 River Side Road,Patna,65,97
+Anjali,Das,813353,987 River Side Road,Kochi,256,323
+Karan,Singh,231309,369 Garden View Layout,Patna,180,242
+Priya,Gupta,176855,369 Garden View Layout,Bangalore,63,120
+Arjun,Yadav,259815,654 Green Valley Colony,Kolkata,296,358
+Riya,Reddy,910414,654 Green Valley Colony,Kochi,72,146
+Riya,Sharma,834662,987 River Side Road,Lucknow,165,227
+Neha,Gupta,609589,"123 MG Road, Sector 7",Chennai,118,139
+Karan,Iyer,225257,987 River Side Road,Kolkata,276,366
+Neha,Patel,165128,654 Green Valley Colony,Patna,262,354
+Vikram,Singh,688318,258 Sunshine Enclave,Chennai,91,103
+Sneha,Iyer,805636,"321 Palm Street, Flat 102",Indore,167,207
+Vikram,Das,161347,369 Garden View Layout,Ahmedabad,242,339
+Sneha,Yadav,988542,654 Green Valley Colony,Ahmedabad,205,282
+Priya,Verma,670230,258 Sunshine Enclave,Kolkata,286,359
+Sneha,Patel,839304,987 River Side Road,Hyderabad,296,383
+Rahul,Singh,729939,753 City Center Plaza,Ahmedabad,135,153
+Anjali,Singh,648413,258 Sunshine Enclave,Kolkata,260,327
+Rahul,Reddy,673644,369 Garden View Layout,Chennai,231,301
+Neha,Verma,298730,"321 Palm Street, Flat 102",Kochi,86,121
+Arjun,Das,758276,654 Green Valley Colony,Hyderabad,264,301
+Vikram,Iyer,483378,753 City Center Plaza,Hyderabad,209,297
+Karan,Sharma,974648,789 Lake View Apartments,Kochi,223,291
+Riya,Iyer,521799,"321 Palm Street, Flat 102",Indore,153,208
+Vikram,Yadav,634568,147 Hill Top Residency,Kolkata,103,146
+Neha,Nair,412920,"456 Park Avenue, Block 3",Bangalore,95,139
+Sneha,Iyer,441939,369 Garden View Layout,Indore,298,389
+Vikram,Reddy,351604,"456 Park Avenue, Block 3",Ahmedabad,128,147
+Rahul,Reddy,727505,654 Green Valley Colony,Indore,191,272
+Rahul,Das,646744,"123 MG Road, Sector 7",Hyderabad,292,376
+Vikram,Nair,780698,789 Lake View Apartments,Hyderabad,59,81
+Rahul,Verma,364268,369 Garden View Layout,Chennai,235,294
+Anjali,Patel,397710,147 Hill Top Residency,Patna,82,175
+Sneha,Das,202824,987 River Side Road,Indore,294,387
+Rahul,Singh,537187,753 City Center Plaza,Lucknow,75,115
+Priya,Singh,828870,"321 Palm Street, Flat 102",Bangalore,202,290
+Priya,Singh,171264,753 City Center Plaza,Bangalore,212,312
+Priya,Reddy,422733,753 City Center Plaza,Indore,256,351
+Aman,Das,578490,147 Hill Top Residency,Patna,52,106
+Priya,Nair,643322,369 Garden View Layout,Delhi,121,138
+Priya,Patel,377100,"456 Park Avenue, Block 3",Lucknow,90,186
+Sneha,Singh,879392,654 Green Valley Colony,Bangalore,68,106
+Aman,Singh,336609,"456 Park Avenue, Block 3",Lucknow,220,267
+Karan,Patel,905500,258 Sunshine Enclave,Patna,284,362
+Neha,Sharma,781774,369 Garden View Layout,Hyderabad,81,115
+Anjali,Patel,531268,"456 Park Avenue, Block 3",Indore,300,344
+Priya,Nair,571916,654 Green Valley Colony,Chennai,152,213
+Anjali,Nair,965153,369 Garden View Layout,Ahmedabad,211,255
+Anjali,Sharma,558644,147 Hill Top Residency,Lucknow,252,331
+Rahul,Singh,581147,987 River Side Road,Ahmedabad,253,308
+Priya,Singh,391835,753 City Center Plaza,Chennai,107,175
+Sneha,Nair,789941,987 River Side Road,Delhi,162,246
+Priya,Yadav,226518,"321 Palm Street, Flat 102",Bangalore,230,281
+Aman,Iyer,859138,369 Garden View Layout,Kolkata,139,149
+Anjali,Yadav,722169,"456 Park Avenue, Block 3",Delhi,103,202
+Riya,Verma,705072,"123 MG Road, Sector 7",Kolkata,117,167
+Riya,Verma,273656,987 River Side Road,Delhi,87,177
+Vikram,Gupta,933228,369 Garden View Layout,Lucknow,263,355
+Rahul,Das,614955,987 River Side Road,Kochi,233,260
+Arjun,Patel,850737,753 City Center Plaza,Kolkata,140,212
+Priya,Singh,586558,369 Garden View Layout,Lucknow,127,196
+Priya,Das,129377,258 Sunshine Enclave,Chennai,58,99
+Riya,Das,404126,753 City Center Plaza,Chennai,236,273
+Vikram,Das,246483,"321 Palm Street, Flat 102",Hyderabad,88,149
+Neha,Iyer,286342,753 City Center Plaza,Delhi,72,166
+Sneha,Yadav,220958,"456 Park Avenue, Block 3",Kolkata,253,266
+Aman,Reddy,773776,147 Hill Top Residency,Patna,74,89
+Rahul,Iyer,329453,753 City Center Plaza,Kochi,175,185
+Sneha,Verma,182162,"123 MG Road, Sector 7",Delhi,207,262
+Riya,Gupta,869751,753 City Center Plaza,Lucknow,190,245
+Neha,Sharma,823397,987 River Side Road,Ahmedabad,170,259
+Riya,Singh,577425,753 City Center Plaza,Chennai,67,156
+Karan,Sharma,734383,753 City Center Plaza,Bangalore,221,244
+Riya,Yadav,350970,"456 Park Avenue, Block 3",Patna,267,312
+Aman,Yadav,850764,147 Hill Top Residency,Ahmedabad,150,248
+Arjun,Singh,806039,987 River Side Road,Indore,216,238
+Karan,Yadav,180808,258 Sunshine Enclave,Ahmedabad,241,327
+Priya,Patel,706692,"123 MG Road, Sector 7",Indore,199,278
+Anjali,Verma,302419,"321 Palm Street, Flat 102",Hyderabad,192,270
+Anjali,Patel,992062,369 Garden View Layout,Bangalore,247,295
+Anjali,Gupta,819610,789 Lake View Apartments,Indore,80,109
+Aman,Yadav,970287,987 River Side Road,Kochi,176,222
+Anjali,Sharma,143917,"456 Park Avenue, Block 3",Indore,53,150
+Anjali,Nair,243292,753 City Center Plaza,Lucknow,106,160
+Karan,Singh,570006,789 Lake View Apartments,Kochi,150,183
+Priya,Singh,157050,369 Garden View Layout,Kolkata,278,373
+Neha,Das,389704,"123 MG Road, Sector 7",Indore,51,104
+Vikram,Reddy,517396,654 Green Valley Colony,Ahmedabad,111,162
+Sneha,Singh,802017,"321 Palm Street, Flat 102",Bangalore,248,321
+Priya,Sharma,781636,"321 Palm Street, Flat 102",Ahmedabad,165,181
+Arjun,Reddy,641906,"321 Palm Street, Flat 102",Indore,65,164
+Karan,Iyer,893821,789 Lake View Apartments,Chennai,152,191
+Arjun,Yadav,515627,654 Green Valley Colony,Ahmedabad,189,219
+Sneha,Yadav,687357,"123 MG Road, Sector 7",Ahmedabad,72,88
+Arjun,Das,169812,"456 Park Avenue, Block 3",Lucknow,65,130

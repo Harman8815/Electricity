@@ -1,0 +1,33 @@
+ ****** ***************************** Top of Data ********************
+ 000001 //OZA265R  JOB NOTIFY=&SYSUID                                 
+ 000002 //STEP0    EXEC PGM=IDCAMS                                    
+ 000003 //SYSPRINT DD SYSOUT=*                                        
+ 000004 //SYSIN    DD *                                               
+ 000005   DELETE OZA265.ELE.CUST.KSDS.FILE CLUSTER                    
+ 000006   SET MAXCC=0                                                 
+ 000007 /*                                                            
+ 000008 //STEP1    EXEC PGM=IDCAMS                                    
+ 000009 //SYSPRINT DD SYSOUT=*                                        
+ 000010 //SYSIN    DD *                                               
+ 000011   DEFINE CLUSTER (NAME(OZA265.ELE.CUST.KSDS.FILE) -           
+ 000012         INDEXED -                                             
+ 000013         KEYS(12 0) -                                          
+ 000014         RECORDSIZE(83 83) -                                   
+ 000015         TRACKS(1 1) -                                         
+ 000016         REUSE -                     
+  000017         ) -                                                             
+ 000018         DATA (NAME(OZA265.ELE.CUST.KSDS.FILE.DATA) -                    
+ 000019         ) -                                                             
+ 000020         INDEX (NAME(OZA265.ELE.CUST.KSDS.FILE.INDEX) -                  
+ 000021         )                                                               
+ 000022 /*                                                                      
+ 000023 //STEP2    EXEC PGM=CUST001                                             
+ 000024 //STEPLIB  DD DSN=OZA265.TRGA5.COBOL.LOADLIB,DISP=SHR                   
+ 000025 //SYSPRINT DD SYSOUT=*                                                  
+ 000026 //SYSOUT   DD SYSOUT=*                                                  
+ 000027 //CUSTIN   DD DSN=OZA265.ELE.CUST.PS,                                   
+ 000028 //             DISP=SHR                                                 
+ 000029 //CUSTKSDS DD DSN=OZA265.ELE.CUST.KSDS.FILE,                            
+ 000030 //             DISP=OLD                                                 
+ 000031 //CUSTERR  DD SYSOUT=*                                                  
+ ****** **************************** Bottom of Data ****************************                          
