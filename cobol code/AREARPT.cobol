@@ -106,58 +106,53 @@
           05 WS-LOOP-CTR           PIC 9(04).
 
        01 WS-REPORT-HEADER1.
-          05 FILLER               PIC X(35) VALUE SPACES.
-          05 FILLER               PIC X(40) VALUE 'AREA WISE '.
-          05 FILLER               PIC X(44) VALUE SPACES.
+          05 FILLER               PIC X(30) VALUE SPACES.
+          05 FILLER               PIC X(12) VALUE 'AREA WISE'.
+          05 FILLER               PIC X(25) VALUE SPACES.
           05 FILLER               PIC X(5)  VALUE 'PAGE'.
           05 WS-RPT-PAGE-NUM      PIC ZZ9.
 
        01 WS-REPORT-HEADER2.
-          05 FILLER               PIC X(40) VALUE
-                                  '-------------------------------'.
-
-          05 FILLER               PIC X(40) VALUE
-                                  '-------------------------------'.
+          05 FILLER               PIC X(31) VALUE
+                                  '-----------------------------'.
+          05 FILLER               PIC X(41) VALUE
+                                  '-----------------------------'.
        01 WS-REPORT-HEADER3.
-          05 FILLER               PIC X(5)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 FILLER               PIC X(4)  VALUE 'AREA'.
-          05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(15) VALUE 'TOTAL CUSTOMERS'.
-          05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE 'TOTAL UNIT'.
-          05 FILLER               PIC X(89) VALUE SPACES.
+          05 FILLER               PIC X(3)  VALUE SPACES.
+          05 FILLER               PIC X(7)  VALUE 'CUSTS'.
+          05 FILLER               PIC X(4)  VALUE SPACES.
+          05 FILLER               PIC X(5)  VALUE 'UNITS'.
+          05 FILLER               PIC X(48) VALUE SPACES.
 
        01 WS-REPORT-HEADER4.
-          05 FILLER               PIC X(5)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 FILLER               PIC X(4)  VALUE '----'.
-          05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(15) VALUE '-------------'.
-          05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE '---------'.
-          05 FILLER               PIC X(89) VALUE SPACES.
+          05 FILLER               PIC X(3)  VALUE SPACES.
+          05 FILLER               PIC X(7)  VALUE '------'.
+          05 FILLER               PIC X(4)  VALUE SPACES.
+          05 FILLER               PIC X(5)  VALUE '-----'.
+          05 FILLER               PIC X(48) VALUE SPACES.
 
        01 WS-REPORT-DETAIL.
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE '|'.
           05 WS-RPT-AREA-CODE     PIC X(6).
           05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-CUST-COUNT    PIC Z,ZZ9.
+          05 WS-RPT-CUST-COUNT    PIC ZZZ9.
           05 FILLER               PIC X(3)  VALUE SPACES.
-          05 WS-RPT-TOTAL-UNITS   PIC 9(9).
-          05 FILLER               PIC X(53) VALUE SPACES.
-          05 ws-end-mark          pic x value '*'.
+          05 WS-RPT-TOTAL-UNITS   PIC ZZZZZZZ9.
+          05 FILLER               PIC X(1)  VALUE '|'.
+          05 FILLER               PIC X(56) VALUE SPACES.
        01 WS-REPORT-TOTAL.
-          05 FILLER               PIC X(5)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE '|'.
           05 FILLER               PIC X(5)  VALUE 'TOTAL'.
-          05 FILLER               PIC X(6)  VALUE SPACES.
-          05 WS-RPT-TOTAL-CUST    PIC Z,ZZ9.
-          05 FILLER               PIC X(8)  VALUE SPACES.
-          05 WS-RPT-area-UNITS    PIC 9(9).
-          05 FILLER               PIC X(89) VALUE SPACES.
-
-       01 WS-display-fields.
-          05 ws-disp-area-code    PIC X(6).
-          05 ws-disp-cust-count   PIC X(5).
-          05 WS-disp-area-units   PIC x(10).
+          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 WS-RPT-TOTAL-CUST    PIC ZZZ9.
+          05 FILLER               PIC X(3)  VALUE SPACES.
+          05 WS-RPT-area-UNITS    PIC ZZZZZZZ9.
+          05 FILLER               PIC X(1)  VALUE '|'.
+          05 FILLER               PIC X(57) VALUE SPACES.
 
        01 WS-REPORT-FOOTER.
           05 FILLER               PIC X(120) VALUE SPACES.
@@ -360,29 +355,14 @@
                PERFORM 2750-WRITE-PAGE-HEADERS
            END-IF
 
-           MOVE WS-A-AREA-CODE(WS-AREA-IDX) TO WS-disp-AREA-CODE
-           MOVE WS-A-CUSTOMER-COUNT(WS-AREA-IDX) TO WS-disp-CUST-COUNT
-           MOVE WS-A-TOTAL-UNITS(WS-AREA-IDX) TO WS-disp-area-UNITS
-           move '*' to ws-report-detail(72:1)
-           DISPLAY 'WRITING RECORD - AREA: ' WS-disp-AREA-CODE
-           DISPLAY 'WRITING RECORD - CUST COUNT: ' WS-disp-CUST-COUNT
+           MOVE WS-A-AREA-CODE(WS-AREA-IDX) TO WS-RPT-AREA-CODE
+           MOVE WS-A-CUSTOMER-COUNT(WS-AREA-IDX) TO WS-RPT-CUST-COUNT
+           MOVE WS-A-TOTAL-UNITS(WS-AREA-IDX) TO WS-RPT-TOTAL-UNITS
+           DISPLAY 'WRITING RECORD - AREA: ' WS-RPT-AREA-CODE
+           DISPLAY 'WRITING RECORD - CUST COUNT: ' WS-RPT-CUST-COUNT
            DISPLAY 'WRITING RECORD - UNITS: '
-                  WS-disp-AREA-units
-           move spaces to to01-area-rpt-record
-           string
-             "|   " DELIMITED BY SIZE
-             ws-disp-area-code delimited by size
-             "   |       " DELIMITED BY SIZE
-             ws-disp-cust-count delimited by size
-             "       |         " DELIMITED BY SIZE
-             ws-disp-area-units delimited by size
-             "        | " DELIMITED BY SIZE
-             into to01-area-rpt-record
-           end-string
-           STRING TO01-AREA-RPT-RECORD DELIMITED BY SIZE
-                 "*" delimited by size into to01-area-rpt-record
-           end-string
-           WRITE TO01-AREA-RPT-RECORD
+                  WS-RPT-TOTAL-UNITS
+           WRITE TO01-AREA-RPT-RECORD FROM WS-REPORT-DETAIL
 
            ADD 1 TO WS-LINE-COUNT
            ADD 1 TO WS-WRITE-CTR.
