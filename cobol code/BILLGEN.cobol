@@ -71,9 +71,9 @@
 
        FD TO01-BILL-RPT
            RECORDING MODE          IS F
-           RECORD CONTAINS         133 CHARACTERS.
+           RECORD CONTAINS         72 CHARACTERS.
 
-       01 TO01-BILL-RPT-RECORD PIC X(133).
+       01 TO01-BILL-RPT-RECORD PIC X(72).
 
        WORKING-STORAGE SECTION.
 
@@ -143,62 +143,64 @@
           05 WS-MAX-BILLS          PIC 9(04) VALUE 1000.
 
        01 WS-REPORT-HEADER1.
-          05 FILLER               PIC X(40) VALUE SPACES.
-          05 FILLER               PIC X(30) VALUE 'ELECTRICITY BILLING REPORT'.
-          05 FILLER               PIC X(53) VALUE SPACES.
+          05 FILLER               PIC X(32) VALUE SPACES.
+          05 FILLER               PIC X(18) VALUE 'ELE BILLING Report'.
+          05 FILLER               PIC X(17) VALUE SPACES.
           05 FILLER               PIC X(5)  VALUE 'PAGE'.
           05 WS-RPT-PAGE-NUM      PIC ZZ9.
 
        01 WS-REPORT-HEADER2.
-          05 FILLER               PIC X(40) VALUE SPACES.
-          05 FILLER               PIC X(30) VALUE '----------------------------'.
+          05 FILLER               PIC X(32) VALUE SPACES.
+          05 FILLER               PIC X(14) VALUE '--------------'.
+          05 FILLER               PIC X(26) VALUE SPACES.
 
        01 WS-REPORT-HEADER3.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(8)  VALUE 'BILL ID'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(12) VALUE 'CUST ID'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(7)  VALUE 'BILL ID'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(7)  VALUE 'CUST ID'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 FILLER               PIC X(10) VALUE 'FIRST NAME'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE 'LAST NAME'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(6)  VALUE 'AREA'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE 'UNITS'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(12) VALUE 'AMOUNT(Rs)'.
-          05 FILLER               PIC X(51) VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(9)  VALUE 'LAST NAME'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(4)  VALUE 'AREA'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(5)  VALUE 'UNITS'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(10) VALUE 'AMOUNT(Rs)'.
+          05 FILLER               PIC X(12) VALUE SPACES.
 
        01 WS-REPORT-DETAIL.
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 WS-RPT-BILL-ID       PIC X(12).
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-CUST-ID       PIC X(12).
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-CUST-ID       PIC X(13).
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 WS-RPT-FIRST-NAME    PIC X(10).
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-LAST-NAME     PIC X(10).
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-LAST-NAME     PIC X(9).
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 WS-RPT-AREA          PIC X(6).
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-UNITS         PIC ZZZ,ZZ9.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-AMOUNT        PIC Z,ZZZ,ZZ9.99.
-          05 FILLER               PIC X(51) VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-UNITS         PIC ZZ9.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-AMOUNT        PIC ZZZ9.
+          05 FILLER               PIC X(12) VALUE SPACES.
 
        01 WS-REPORT-TOTAL.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(20) VALUE 'TOTAL BILLS:'.
-          05 WS-RPT-TOTAL-BILLS   PIC Z,ZZ9.
-          05 FILLER               PIC X(20) VALUE SPACES.
-          05 FILLER               PIC X(15) VALUE 'TOTAL AMOUNT:'.
-          05 WS-RPT-TOTAL-AMOUNT  PIC Z,ZZZ,ZZZ,ZZ9.99.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(11) VALUE 'TOTAL BILLS:'.
+          05 WS-RPT-TOTAL-BILLS   PIC ZZZ9.
+          05 FILLER               PIC X(5)  VALUE SPACES.
+          05 FILLER               PIC X(12) VALUE 'TOTAL AMOUNT:'.
+          05 WS-RPT-TOTAL-AMOUNT  PIC ZZZZZ9.
+          05 FILLER               PIC X(30) VALUE SPACES.
 
        01 WS-REPORT-FOOTER.
-          05 FILLER           PIC X(120) VALUE SPACES.
-          05 FILLER           PIC X(5)   VALUE 'PAGE:'.
-          05 WS-FTR-PAGE      PIC ZZ9.
+          05 FILLER               PIC X(60) VALUE SPACES.
+          05 FILLER               PIC X(5)   VALUE 'PAGE:'.
+          05 WS-FTR-PAGE          PIC ZZ9.
 
        PROCEDURE DIVISION.
        0000-MAIN-LINE   SECTION.
