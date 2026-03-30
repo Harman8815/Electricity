@@ -50,9 +50,9 @@
 
        FD TO01-HIGH-CONS-RPT
            RECORDING MODE          IS F
-           RECORD CONTAINS         139 CHARACTERS.
+           RECORD CONTAINS         72 CHARACTERS.
 
-       01 TO01-HIGH-CONS-RPT-RECORD PIC X(133).
+       01 TO01-HIGH-CONS-RPT-RECORD PIC X(72).
 
        WORKING-STORAGE SECTION.
 
@@ -114,47 +114,48 @@
           05 WS-SORT-COUNT         PIC 9(04) VALUE ZEROS.
 
        01 WS-REPORT-HEADER1.
-          05 FILLER               PIC X(40) VALUE SPACES.
-          05 FILLER               PIC X(30) VALUE 'top5 high Report'.
-          05 FILLER               PIC X(53) VALUE SPACES.
+          05 FILLER               PIC X(32) VALUE SPACES.
+          05 FILLER               PIC X(15) VALUE 'top5 high Report'.
+          05 FILLER               PIC X(20) VALUE SPACES.
           05 FILLER               PIC X(5)  VALUE 'PAGE'.
           05 WS-RPT-PAGE-NUM      PIC ZZ9.
        01 WS-REPORT-HEADER2.
-          05 FILLER               PIC X(40) VALUE SPACES.
-          05 FILLER               PIC X(30) VALUE '--------------'.
+          05 FILLER               PIC X(32) VALUE SPACES.
+          05 FILLER               PIC X(14) VALUE '--------------'.
+          05 FILLER               PIC X(26) VALUE SPACES.
        01 WS-REPORT-HEADER3.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(8)  VALUE 'rank'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(12) VALUE 'CUST ID'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(4)  VALUE 'rank'.
+          05 FILLER               PIC X(3)  VALUE SPACES.
+          05 FILLER               PIC X(10) VALUE 'CUST ID'.
           05 FILLER               PIC X(2)  VALUE SPACES.
           05 FILLER               PIC X(10) VALUE 'FIRST NAME'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE 'LAST NAME'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(6)  VALUE 'AREA'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE 'UNITS'.
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(9)  VALUE 'LAST NAME'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(4)  VALUE 'AREA'.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 FILLER               PIC X(5)  VALUE 'UNITS'.
+          05 FILLER               PIC X(20) VALUE SPACES.
        01 WS-REPORT-DETAIL.
           05 FILLER               PIC X(3)  VALUE SPACES.
           05 WS-RPT-RANK          PIC Z9.
           05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-CUST-ID       PIC X(12).
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 WS-RPT-CUST-ID       PIC X(13).
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 WS-RPT-FIRST-NAME    PIC X(10).
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-LAST-NAME     PIC X(10).
-          05 FILLER               PIC X(2)  VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-LAST-NAME     PIC X(9).
+          05 FILLER               PIC X(1)  VALUE SPACES.
           05 WS-RPT-AREA          PIC X(6).
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-CITY          PIC X(10).
-          05 FILLER               PIC X(2)  VALUE SPACES.
-          05 WS-RPT-UNITS         PIC ZZZ,ZZ9.
-          05 FILLER               PIC X(52) VALUE SPACES.
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-CITY          PIC X(7).
+          05 FILLER               PIC X(1)  VALUE SPACES.
+          05 WS-RPT-UNITS         PIC ZZ9.
+          05 FILLER               PIC X(13) VALUE SPACES.
 
        01 WS-REPORT-FOOTER.
-          05 FILLER               PIC X(120) VALUE SPACES.
+          05 FILLER               PIC X(60) VALUE SPACES.
           05 FILLER               PIC X(5)   VALUE 'PAGE:'.
           05 WS-FTR-PAGE          PIC ZZ9.
        01 WS-FOUND-FLAG PIC X VALUE 'N'.
