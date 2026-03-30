@@ -6,6 +6,20 @@ FIRST_NAMES = ["Aman","Riya","Karan","Neha","Rahul","Priya","Arjun","Sneha","Vik
 LAST_NAMES = ["Sharma","Verma","Patel","Singh","Gupta","Nair","Reddy","Iyer","Yadav","Das"]
 CITIES = ["Indore","Bangalore","Ahmedabad","Delhi","Lucknow","Kochi","Hyderabad","Chennai","Patna","Kolkata"]
 
+# Static area codes for grouping people
+AREA_CODES = [
+    "110001",  # Delhi North
+    "110002",  # Delhi South  
+    "400001",  # Mumbai Central
+    "400002",  # Mumbai West
+    "560001",  # Bangalore East
+    "560002",  # Bangalore West
+    "380001",  # Ahmedabad North
+    "380002",  # Ahmedabad South
+    "500001",  # Hyderabad Central
+    "500002"   # Hyderabad East
+]
+
 ADDRESSES = [
     "123 MG Road, Sector 7",
     "456 Park Avenue, Block 3", 
@@ -33,11 +47,13 @@ def clear_old_files():
 
 def generate_master_data(n):
     data = []
-    for _ in range(n):
+    
+    # Randomly assign area codes to people (not evenly distributed)
+    for i in range(n):
         first = random.choice(FIRST_NAMES)
         last = random.choice(LAST_NAMES)
         city = random.choice(CITIES)
-        area = str(random.randint(100000, 999999))
+        area = random.choice(AREA_CODES)  # Random selection from static area codes
         address = random.choice(ADDRESSES)
         prev = random.randint(50, 300)
         curr = prev + random.randint(10, 100)
