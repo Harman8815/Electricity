@@ -94,7 +94,7 @@
        01 WS-HIGH-CONS-STORAGE.
           05 WS-HIGH-CONS-TABLE.
              10 WS-HIGH-CONS-RECORD OCCURS 1000 TIMES
-                                 INDEXED BY WS-HIGH-IDX.
+                                 INDEXED BY WS-HIGH-IDX ws-sort-idx2.
                 15 WS-H-CUST-ID          PIC X(12).
                 15 WS-H-FIRST-NAME       PIC X(10).
                 15 WS-H-LAST-NAME        PIC X(10).
@@ -106,9 +106,9 @@
           05 WS-MAX-CUSTOMERS      PIC 9(04) VALUE 1000.
 
         01 WS-SORT-WORK-AREA.
-          05 WS-SORT-TABLE.
-             10 WS-SORT-RECORD OCCURS 1000 TIMES
-                                INDEXED BY WS-SORT-IDX WS-SORT-IDX2.
+           05 WS-SORT-TABLE.
+              10 WS-SORT-RECORD OCCURS 1000 TIMES
+                                INDEXED BY WS-SORT-IDX.
                 15 WS-S-UNITS-CONSUMED   PIC 9(6).
                 15 WS-S-INDEX            PIC 9(4).
           05 WS-SORT-COUNT         PIC 9(04) VALUE ZEROS.
@@ -157,7 +157,7 @@
           05 FILLER               PIC X(120) VALUE SPACES.
           05 FILLER               PIC X(5)   VALUE 'PAGE:'.
           05 WS-FTR-PAGE          PIC ZZ9.
-
+       01 WS-FOUND-FLAG PIC X VALUE 'N'.
 
        01 WS-TEMP-VARIABLES.
           05 WS-TEMP-UNITS        PIC 9(06).
@@ -169,11 +169,9 @@
           05 WS-TEMP-RANK-IDX     PIC 9(04).
           05 WS-TEMP-LOOP-CTR1    PIC 9(04).
           05 WS-TEMP-LOOP-CTR2    PIC 9(04).
-
        01 WS-TOP5.
           05 WS-TOP-UNITS OCCURS 5 TIMES PIC 9(06) VALUE ZEROS.
           05 WS-TOP-IDX   OCCURS 5 TIMES PIC 9(04) VALUE ZEROS.
-
        PROCEDURE DIVISION.
        0000-MAIN-LINE   SECTION.
 
@@ -325,52 +323,76 @@
               MOVE WS-HIGH-LOOP-CTR TO WS-S-INDEX(WS-SORT-IDX)
            END-PERFORM
 
-           PERFORM 2360-FIND-TOP5.
+           PERFORM 2310-BUBBLE-SORT.
+       2360-FIND-TOP5 SECTION.
 
-      2360-FIND-TOP5 SECTION.
+            DISPLAY '----- FINDING TOP 5 CONSUMERS -----'
 
-       DISPLAY '----- FINDING TOP 5 CONSUMERS -----'
+            PERFORM VARYING WS-HIGH-LOOP-CTR FROM 1 BY 1
+                    UNTIL WS-HIGH-LOOP-CTR > WS-HIGH-COUNT
 
-       PERFORM VARYING WS-HIGH-LOOP-CTR FROM 1 BY 1
-               UNTIL WS-HIGH-LOOP-CTR > WS-HIGH-COUNT
+                SET WS-HIGH-IDX TO WS-HIGH-LOOP-CTR
+                MOVE 'N' TO WS-FOUND-FLAG
 
-           SET WS-HIGH-IDX TO WS-HIGH-LOOP-CTR
-           MOVE 'N' TO WS-FOUND-FLAG
+                PERFORM VARYING WS-RANK-COUNTER FROM 1 BY 1
+                        UNTIL WS-RANK-COUNTER > 5
+                           OR WS-FOUND-FLAG = 'Y'
 
-           PERFORM VARYING WS-RANK-COUNTER FROM 1 BY 1
-                   UNTIL WS-RANK-COUNTER > 5
-                      OR WS-FOUND-FLAG = 'Y'
+                    IF WS-H-UNITS(WS-HIGH-IDX) >
+                   WS-TOP-UNITS(WS-RANK-COUNTER)
+                   PERFORM VARYING WS-TEMP-LOOP-CTR1 FROM 5 BY -1
+                           UNTIL WS-TEMP-LOOP-CTR1 <= WS-RANK-COUNTER
 
-               IF WS-H-UNITS(WS-HIGH-IDX) >
-                  WS-TOP-UNITS(WS-RANK-COUNTER)
+                       MOVE WS-TOP-UNITS(WS-TEMP-LOOP-CTR1 - 1)
+                           TO WS-TOP-UNITS(WS-TEMP-LOOP-CTR1)
 
-                  * Shift values down
-                  PERFORM VARYING WS-TEMP-LOOP-CTR1 FROM 5 BY -1
-                          UNTIL WS-TEMP-LOOP-CTR1 <= WS-RANK-COUNTER
+                       MOVE WS-TOP-IDX(WS-TEMP-LOOP-CTR1 - 1)
+                           TO WS-TOP-IDX(WS-TEMP-LOOP-CTR1)
+                   END-PERFORM
+                   MOVE WS-H-UNITS(WS-HIGH-IDX)
+                        TO WS-TOP-UNITS(WS-RANK-COUNTER)
+                   MOVE WS-HIGH-LOOP-CTR
+                       TO WS-TOP-IDX(WS-RANK-COUNTER)
 
-                      MOVE WS-TOP-UNITS(WS-TEMP-LOOP-CTR1 - 1)
-                          TO WS-TOP-UNITS(WS-TEMP-LOOP-CTR1)
+                   MOVE 'Y' TO WS-FOUND-FLAG
 
-                      MOVE WS-TOP-IDX(WS-TEMP-LOOP-CTR1 - 1)
-                          TO WS-TOP-IDX(WS-TEMP-LOOP-CTR1)
+                  END-IF
 
-                  END-PERFORM
+               END-PERFORM
 
-                  * Insert value
-                  MOVE WS-H-UNITS(WS-HIGH-IDX)
-                      TO WS-TOP-UNITS(WS-RANK-COUNTER)
+            END-PERFORM.
+       2310-BUBBLE-SORT SECTION.
 
-                  MOVE WS-HIGH-LOOP-CTR
-                      TO WS-TOP-IDX(WS-RANK-COUNTER)
+           PERFORM VARYING WS-TEMP-LOOP-CTR1 FROM WS-SORT-COUNT
+                     BY -1 UNTIL WS-TEMP-LOOP-CTR1 = 1
+              PERFORM VARYING WS-TEMP-LOOP-CTR2 FROM 1 BY 1
+                        UNTIL WS-TEMP-LOOP-CTR2 >= WS-TEMP-LOOP-CTR1
+                 SET WS-SORT-IDX TO WS-TEMP-LOOP-CTR2
+                 SET WS-SORT-IDX2 UP BY 1
+                 IF WS-SORT-IDX2 <= WS-SORT-COUNT
+                    IF WS-S-UNITS-CONSUMED(WS-SORT-IDX)
+                       < WS-S-UNITS-CONSUMED(WS-SORT-IDX2)
+                       PERFORM 2320-SWAP-RECORDS
+                   END-IF
+                END-IF
+                SET WS-SORT-IDX2 DOWN BY 1
+              END-PERFORM
+           END-PERFORM.
+       2320-SWAP-RECORDS SECTION.
 
-                  MOVE 'Y' TO WS-FOUND-FLAG
-
-               END-IF
-
-           END-PERFORM
-
-       END-PERFORM. 
-      2400-WRITE-TOP-FIVE-REPORT SECTION.
+           MOVE WS-S-UNITS-CONSUMED(WS-SORT-IDX)
+               TO WS-TEMP-UNITS
+           MOVE WS-S-INDEX(WS-SORT-IDX)
+               TO WS-TEMP-INDEX
+           MOVE WS-S-UNITS-CONSUMED(WS-SORT-IDX2)
+               TO WS-S-UNITS-CONSUMED(WS-SORT-IDX)
+           MOVE WS-S-INDEX(WS-SORT-IDX2)
+               TO WS-S-INDEX(WS-SORT-IDX)
+           MOVE WS-TEMP-UNITS
+               TO WS-S-UNITS-CONSUMED(WS-SORT-IDX2)
+           MOVE WS-TEMP-INDEX
+               TO WS-S-INDEX(WS-SORT-IDX2).
+       2400-WRITE-TOP-FIVE-REPORT SECTION.
            DISPLAY '----------------------------------------'
            DISPLAY 'WRITING TOP 5 HIGH CONSUMERS REPORT .....'
            DISPLAY '----------------------------------------'

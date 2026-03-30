@@ -1,4 +1,4 @@
-IDENTIFICATION DIVISION.
+       IDENTIFICATION DIVISION.
        PROGRAM-ID.  arearpt.
 
        ENVIRONMENT DIVISION.
@@ -27,7 +27,6 @@ IDENTIFICATION DIVISION.
        DATA DIVISION.
 
        FILE SECTION.
-
        FD MI01-METER-KSDS
            RECORD CONTAINS         38  CHARACTERS.
        01 MI01-METER-RECORD.
@@ -51,8 +50,7 @@ IDENTIFICATION DIVISION.
        FD TO01-AREA-RPT
            RECORDING MODE          IS F
            RECORD CONTAINS         139 CHARACTERS.
-
-       01 TO01-AREA-RPT-RECORD PIC X(139).
+       01 TO01-AREA-RPT-RECORD PIC X(72).
 
        WORKING-STORAGE SECTION.
 
@@ -84,7 +82,6 @@ IDENTIFICATION DIVISION.
           05 WS-PAGE-NUM           PIC 9(03) VALUE 1.
           05 WS-LINE-COUNT         PIC 9(03) VALUE 0.
           05 WS-MAX-LINES          PIC 9(03) VALUE 15.
-
        01 WS-COUNTERS.
           05 WS-READ-CTR           PIC 9(04) VALUE ZEROS.
           05 WS-WRITE-CTR          PIC 9(04) VALUE ZEROS.
@@ -101,7 +98,6 @@ IDENTIFICATION DIVISION.
                 15 WS-A-TOTAL-UNITS      PIC 9(08) VALUE ZEROS.
           05 WS-AREA-COUNT         PIC 9(04) VALUE ZEROS.
           05 WS-MAX-AREAS          PIC 9(04) VALUE 100.
-
        01 WS-TEMP-VARIABLES.
           05 WS-TEMP-AREA-CODE     PIC X(6).
           05 WS-AREA-FOUND         PIC X(1) VALUE 'N'.
@@ -111,51 +107,57 @@ IDENTIFICATION DIVISION.
 
        01 WS-REPORT-HEADER1.
           05 FILLER               PIC X(35) VALUE SPACES.
-          05 FILLER               PIC X(40) VALUE 'AREA WISE CONSUMPTION REPORT'.
+          05 FILLER               PIC X(40) VALUE 'AREA WISE '.
           05 FILLER               PIC X(44) VALUE SPACES.
           05 FILLER               PIC X(5)  VALUE 'PAGE'.
           05 WS-RPT-PAGE-NUM      PIC ZZ9.
 
        01 WS-REPORT-HEADER2.
-          05 FILLER               PIC X(35) VALUE SPACES.
-          05 FILLER               PIC X(40) VALUE '----------------------------'.
-          05 FILLER               PIC X(54) VALUE SPACES.
+          05 FILLER               PIC X(40) VALUE
+                                  '-------------------------------'.
 
+          05 FILLER               PIC X(40) VALUE
+                                  '-------------------------------'.
        01 WS-REPORT-HEADER3.
           05 FILLER               PIC X(5)  VALUE SPACES.
           05 FILLER               PIC X(4)  VALUE 'AREA'.
           05 FILLER               PIC X(8)  VALUE SPACES.
           05 FILLER               PIC X(15) VALUE 'TOTAL CUSTOMERS'.
           05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE 'TOTAL UNITS'.
+          05 FILLER               PIC X(10) VALUE 'TOTAL UNIT'.
           05 FILLER               PIC X(89) VALUE SPACES.
 
        01 WS-REPORT-HEADER4.
           05 FILLER               PIC X(5)  VALUE SPACES.
           05 FILLER               PIC X(4)  VALUE '----'.
           05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(15) VALUE '---------------'.
+          05 FILLER               PIC X(15) VALUE '-------------'.
           05 FILLER               PIC X(8)  VALUE SPACES.
-          05 FILLER               PIC X(10) VALUE '-----------'.
+          05 FILLER               PIC X(10) VALUE '---------'.
           05 FILLER               PIC X(89) VALUE SPACES.
 
        01 WS-REPORT-DETAIL.
-          05 FILLER               PIC X(5)  VALUE SPACES.
+          05 FILLER               PIC X(2)  VALUE SPACES.
           05 WS-RPT-AREA-CODE     PIC X(6).
-          05 FILLER               PIC X(6)  VALUE SPACES.
+          05 FILLER               PIC X(2)  VALUE SPACES.
           05 WS-RPT-CUST-COUNT    PIC Z,ZZ9.
-          05 FILLER               PIC X(8)  VALUE SPACES.
-          05 WS-RPT-AREA-UNITS     PIC ZZZ,ZZZ,ZZ9.
-          05 FILLER               PIC X(89) VALUE SPACES.
-
+          05 FILLER               PIC X(3)  VALUE SPACES.
+          05 WS-RPT-TOTAL-UNITS   PIC 9(9).
+          05 FILLER               PIC X(53) VALUE SPACES.
+          05 ws-end-mark          pic x value '*'.
        01 WS-REPORT-TOTAL.
           05 FILLER               PIC X(5)  VALUE SPACES.
           05 FILLER               PIC X(5)  VALUE 'TOTAL'.
           05 FILLER               PIC X(6)  VALUE SPACES.
           05 WS-RPT-TOTAL-CUST    PIC Z,ZZ9.
           05 FILLER               PIC X(8)  VALUE SPACES.
-          05 WS-RPT-TOTAL-UNITS   PIC ZZZ,ZZZ,ZZ9.
+          05 WS-RPT-area-UNITS    PIC 9(9).
           05 FILLER               PIC X(89) VALUE SPACES.
+
+       01 WS-display-fields.
+          05 ws-disp-area-code    PIC X(6).
+          05 ws-disp-cust-count   PIC X(5).
+          05 WS-disp-area-units   PIC x(10).
 
        01 WS-REPORT-FOOTER.
           05 FILLER               PIC X(120) VALUE SPACES.
@@ -241,7 +243,6 @@ IDENTIFICATION DIVISION.
 
                 NOT AT END  ADD 1  TO WS-READ-CTR
                             PERFORM 2220-READ-CUSTOMER
-
            END-READ.
 
        2220-READ-CUSTOMER SECTION.
@@ -260,17 +261,17 @@ IDENTIFICATION DIVISION.
 
            COMPUTE WS-PREV-READ-NUM = MTR-PREV-READ
            COMPUTE WS-CURR-READ-NUM = MTR-CURR-READ
-
-           DISPLAY 'METER DATA - PREV: ' WS-PREV-READ-NUM ' CURR: ' WS-CURR-READ-NUM
-
+           DISPLAY 'METER DATA - PREV: '
+                  WS-PREV-READ-NUM ' CURR: '
+                  WS-CURR-READ-NUM
            IF WS-CURR-READ-NUM < WS-PREV-READ-NUM
               DISPLAY 'ERROR: CURR < PREV FOR CUST ' CUST-KEY
               ADD 1 TO WS-ERROR-CTR
            ELSE
               COMPUTE WS-UNITS-CONSUMED =
                       WS-CURR-READ-NUM - WS-PREV-READ-NUM
-
-              DISPLAY 'CALCULATED UNITS: ' WS-UNITS-CONSUMED ' FOR CUST ' CUST-KEY
+              DISPLAY 'CALCULATED UNITS: '
+                      WS-UNITS-CONSUMED ' FOR CUST ' CUST-KEY
 
               PERFORM 2240-UPDATE-AREA-DATA
            END-IF.
@@ -279,10 +280,8 @@ IDENTIFICATION DIVISION.
 
            MOVE CUST-AREA-CODE TO WS-TEMP-AREA-CODE.
            SET AREA-NOT-FOUND TO TRUE.
-
            DISPLAY 'PROCESSING AREA: ' WS-TEMP-AREA-CODE
            DISPLAY 'UNITS CONSUMED: ' WS-UNITS-CONSUMED
-
            IF WS-AREA-COUNT = ZEROS
               PERFORM 2250-ADD-NEW-AREA
            ELSE
@@ -314,30 +313,30 @@ IDENTIFICATION DIVISION.
 
               DISPLAY 'ADDED NEW AREA: ' WS-A-AREA-CODE(WS-AREA-IDX)
               DISPLAY 'INITIAL UNITS: ' WS-A-TOTAL-UNITS(WS-AREA-IDX)
+
            END-IF.
 
        2260-FIND-AREA SECTION.
 
            SET AREA-NOT-FOUND TO TRUE.
-
            PERFORM VARYING WS-LOOP-CTR FROM 1 BY 1
                      UNTIL WS-LOOP-CTR > WS-AREA-COUNT
                         OR AREA-FOUND
               SET WS-AREA-IDX TO WS-LOOP-CTR
-              IF FUNCTION TRIM(WS-A-AREA-CODE(WS-AREA-IDX)) =
-                 FUNCTION TRIM(WS-TEMP-AREA-CODE)
+              IF  WS-A-AREA-CODE(WS-AREA-IDX) =
+                  WS-TEMP-AREA-CODE
                  SET AREA-FOUND TO TRUE
               END-IF
            END-PERFORM.
-
        2270-UPDATE-EXISTING-AREA SECTION.
 
            ADD 1 TO WS-A-CUSTOMER-COUNT(WS-AREA-IDX)
-           ADD WS-UNITS-CONSUMED TO WS-A-TOTAL-UNITS(WS-AREA-IDX)
-
+           ADD WS-UNITS-CONSUMED TO WS-A-TOTAL-UNITS(WS-AREA-IDX).
            DISPLAY 'UPDATED AREA: ' WS-A-AREA-CODE(WS-AREA-IDX)
-           DISPLAY 'NEW CUSTOMER COUNT: ' WS-A-CUSTOMER-COUNT(WS-AREA-IDX)
-           DISPLAY 'NEW TOTAL UNITS: ' WS-A-TOTAL-UNITS(WS-AREA-IDX)
+           DISPLAY 'NEW CUSTOMER COUNT: '
+            WS-A-CUSTOMER-COUNT(ws-AREA-IDx)
+           DISPLAY 'NEW TOTAL UNITS: ' WS-A-TOTAL-UNITS(WS-AREA-IDX).
+           DISPLAY 'edited value ' WS-rpt-area-UNITS.
 
        2400-WRITE-AREA-REPORT SECTION.
            DISPLAY '----------------------------------------'
@@ -351,7 +350,6 @@ IDENTIFICATION DIVISION.
               SET WS-AREA-IDX TO WS-LOOP-CTR
               PERFORM 2410-WRITE-AREA-RECORD
            END-PERFORM
-
            PERFORM 2800-WRITE-REPORT-TOTALS
            PERFORM 2760-WRITE-FOOTER.
 
@@ -362,15 +360,29 @@ IDENTIFICATION DIVISION.
                PERFORM 2750-WRITE-PAGE-HEADERS
            END-IF
 
-           MOVE WS-A-AREA-CODE(WS-AREA-IDX) TO WS-RPT-AREA-CODE
-           MOVE WS-A-CUSTOMER-COUNT(WS-AREA-IDX) TO WS-RPT-CUST-COUNT
-           MOVE WS-A-TOTAL-UNITS(WS-AREA-IDX) TO WS-RPT-AREA-UNITS
-
-           DISPLAY 'WRITING RECORD - AREA: ' WS-RPT-AREA-CODE
-           DISPLAY 'WRITING RECORD - CUST COUNT: ' WS-RPT-CUST-COUNT
-           DISPLAY 'WRITING RECORD - UNITS: ' WS-RPT-AREA-UNITS
-
-           WRITE TO01-AREA-RPT-RECORD FROM WS-REPORT-DETAIL
+           MOVE WS-A-AREA-CODE(WS-AREA-IDX) TO WS-disp-AREA-CODE
+           MOVE WS-A-CUSTOMER-COUNT(WS-AREA-IDX) TO WS-disp-CUST-COUNT
+           MOVE WS-A-TOTAL-UNITS(WS-AREA-IDX) TO WS-disp-area-UNITS
+           move '*' to ws-report-detail(72:1)
+           DISPLAY 'WRITING RECORD - AREA: ' WS-disp-AREA-CODE
+           DISPLAY 'WRITING RECORD - CUST COUNT: ' WS-disp-CUST-COUNT
+           DISPLAY 'WRITING RECORD - UNITS: '
+                  WS-disp-AREA-units
+           move spaces to to01-area-rpt-record
+           string
+             "|   " DELIMITED BY SIZE
+             ws-disp-area-code delimited by size
+             "   |       " DELIMITED BY SIZE
+             ws-disp-cust-count delimited by size
+             "       |         " DELIMITED BY SIZE
+             ws-disp-area-units delimited by size
+             "        | " DELIMITED BY SIZE
+             into to01-area-rpt-record
+           end-string
+           STRING TO01-AREA-RPT-RECORD DELIMITED BY SIZE
+                 "*" delimited by size into to01-area-rpt-record
+           end-string
+           WRITE TO01-AREA-RPT-RECORD
 
            ADD 1 TO WS-LINE-COUNT
            ADD 1 TO WS-WRITE-CTR.
@@ -422,3 +434,4 @@ IDENTIFICATION DIVISION.
            DISPLAY '----------------------------------------'
 
            STOP RUN.
+
